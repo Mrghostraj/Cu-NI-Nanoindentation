@@ -23,19 +23,15 @@ Simulation Details
 
 System Setup
 
-Parameter	         Value / Material	         Description
+| Parameter          | Value / Material            | Description                                         |
+|-------------------|----------------------------|-----------------------------------------------------|
+| Substrate          | Nickel (Ni)               | Primary material being indented                     |
+| Base               | Copper (Cu, 1 unit thick) | Rigid, stationary base layer (set force = 0)       |
+| Potential          | EAM/alloy                 | Models pairwise interactions between metals/alloys |
+| Indenter Type      | Ghost Spherical Indenter  | Indents along the y-direction, centered on substrate |
+| Indentation Depth  | Constant (~28 units)      | Maintained across all cases for comparison         |
+| Velocity           | Constant                  | Ensures consistent indentation rate                |
 
-Substrate	         Nickel (Ni)	             Primary material being indented
-
-Base	             Copper (Cu, 1 unit thick)	 Rigid, stationary base layer (set force = 0)
-
-Potential	         EAM/alloy	                 Models pairwise interactions between metals and metal alloys
-
-Indenter Type	     Ghost Spherical Indenter	 Indents along the y-direction, centered on the substrate
-
-Indentation Depth	 Constant (~28 units)	     Maintained across all cases for comparison
-
-Velocity	         Constant	                 Ensures consistent indentation rate
 
 Key Simulation Parameters Investigated
 
@@ -43,15 +39,13 @@ Key Simulation Parameters Investigated
 
 Objective: Investigate how varying substrate dimensions affects mechanical properties with a fixed indenter radius of 15 units.
 
-Case	    Substrate Dimensions (units)	   Key Observation
+| Case | Substrate Dimensions (units) | Key Observation |
+|------|-----------------------------|----------------|
+| 1    | Smallest                    | Highest Hardness. Rigid boundaries restrict atom/dislocation motion → Boundary effect. High load drop on unloading. |
+| 2    | Medium                       | Hardness and Young's Modulus decrease. Reduced boundary effect allows more atomic relaxation. |
+| 3    | Large                        | Further decrease in Young's Modulus. Force vs. Depth curve shows rapid fluctuations. |
+| 4    | Largest                      | Lowest Hardness and Young's Modulus. Smooth curve indicates minimal boundary interference and efficient atomic relaxation. |
 
-1	        Smallest	                       Highest Hardness. Rigid boundaries restrict atom/dislocation motion → Boundary effect. High load drop on unloading.
-
-2	        Medium	                           Hardness and Young's Modulus decrease. Reduced boundary effect allows more atomic relaxation.
-
-3	        Large	                           Further decrease in Young's Modulus. Force vs. Depth curve shows rapid fluctuations.
-
-4	        Largest	                           Lowest Hardness and Young's Modulus. Smooth curve indicates minimal boundary interference and efficient atomic relaxation.
 
 Summary: Increasing substrate size reduces Hardness and Young's Modulus due to enhanced atomic/dislocation relaxation and reduced boundary effects, approaching bulk behavior.
 
@@ -59,9 +53,9 @@ Summary: Increasing substrate size reduces Hardness and Young's Modulus due to e
 
 Objective: Analyze the effect of indenter radius with a fixed large substrate.
 
-Indenter Radius (r)     	Observations
-Increasing r	            Maximum load increases due to larger contact area; deformation becomes tougher.
-                            Unloading slope becomes steeper → Young's Modulus increases.
+| Indenter Radius (r) | Observations |
+|--------------------|--------------|
+| Increasing r       | Maximum load increases due to larger contact area; deformation becomes tougher. Unloading slope becomes steeper → Young's Modulus increases. |
 
 Summary: Larger indenter radii increase Maximum Load, Hardness, and Young's Modulus because a larger area requires greater force to initiate plastic deformation.
 
@@ -69,15 +63,13 @@ Summary: Larger indenter radii increase Maximum Load, Hardness, and Young's Modu
 
 Objective: Study how indenter stiffness affects the indentation response.
 
-Case	Substrate Size	Indenter Radius	 Force Constant (k)	    Observation
+| Case | Substrate Size | Indenter Radius | Force Constant (k)     | Observation                                      |
+|------|----------------|----------------|-----------------------|-------------------------------------------------|
+| 1    | Small          | 15 units       | High k (100, 10, 1)   | Steep curves, higher forces                     |
+| 1    | Small          | 15 units       | Low k (0.1, 0.01)     | Shallow, smooth curves                           |
+| 2    | Large          | 30 units       | High k                 | Higher force, less noise than small domain      |
+| 2    | Large          | 30 units       | Low k                  | Lower force, smoother response                  |
 
-1	    Small	        15 units	     High k (100, 10, 1)	Steep curves, higher forces
-
-1	    Small	        15 units	     Low k (0.1, 0.01)	    Shallow, smooth curves
-
-2	    Large	        30 units	     High k	                Higher force, less noise than small domain
-
-2	    Large	        30 units	     Low k	                Lower force, smoother response
 
 Conclusion: The force constant profoundly influences the load-depth response. High k → higher forces, potential numerical artifacts. Low k → underestimation of mechanical properties. Appropriate selection of k is essential for realistic results.
 
@@ -93,14 +85,12 @@ Young's Modulus (E)
 
 Calculated from the slope of the unloading curve in the Force vs. Depth plot using Linear Regression(sklearn Model).
 
-Unit       Conventions      (LAMMPS Metal Units)
+Unit Conventions (LAMMPS Metal Units)
 
-Quantity   Metal Units	    SI Units Approx.
+| Quantity | Metal Units | SI Units Approx. |
+|----------|------------|-----------------|
+| Length   | Å (angstrom) | 1 Å = 1×10⁻¹⁰ m |
+| Mass     | amu          | 1 amu ≈ 1.66×10⁻²⁷ kg |
+| Energy   | eV           | 1 eV ≈ 1.60×10⁻¹⁹ J |
+| Force    | eV/Å         | 1 eV/Å ≈ 1.60×10⁻⁹ N |
 
-Length	   Å (angstrom)	    1 Å = 1×10⁻¹⁰ m
-
-Mass	   amu 	            1 amu ≈ 1.66×10⁻²⁷ kg
-
-Energy	   eV	            1 eV ≈ 1.60×10⁻¹⁹ J
-
-Force	   eV/Å	            1 eV/Å ≈ 1.60×10⁻⁹ N
