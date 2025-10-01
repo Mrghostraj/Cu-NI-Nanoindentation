@@ -1,0 +1,77 @@
+# 3d indenter simulation
+
+units	           metal
+dimension          3
+boundary	   p s p
+atom_style	   atomic
+echo               both
+
+region             box block 0 200 0 200 0 200  units box
+create_box	   2 box	
+
+lattice 	  fcc 3.61
+region            Cu block 0 200 0 1 0 200 units box
+create_atoms      1 region Cu units box
+group             substrate region Cu
+
+
+lattice           fcc 3.52
+region            Ni block 0 200 1 200 0 200 units box
+create_atoms      2 region Ni units box
+group             deposit region Ni
+
+timestep          0.002
+pair_style  	  eam/alloy
+pair_coeff        * * CuNi.set Cu Ni 
+
+# Energy Minimization
+minimize          1.0e-4 1.0e-6 10000 100000
+
+
+dump	          1 all atom 100 dump.indent_CuNi_28A.lammpstrj
+
+log logCu-Ni_28A.dat
+
+# initial velocities
+
+compute	           new deposit temp
+velocity	   deposit create 10 482748 temp new
+
+
+compute           1 deposit centro/atom fcc 
+
+fix	          1 deposit nvt temp 10.0 10.0 0.05
+fix		  2 substrate setforce 0.0 0.0 0.0
+
+# assigining velocity to the indeter in y direction---loading
+
+variable         y equal "220-step*dt*2"
+print            "y is $y" 
+
+#dumping xyz_file
+#dump             8 all xyz 500 coordinate.xyz
+
+# indenter position and radius at onset of loading
+
+fix	           4 deposit indent 100 sphere 100 v_y 100 15.0 units box
+
+thermo	           100
+thermo_style       custom step temp  v_y f_4[1] f_4[2] f_4[3] 
+
+
+
+dump               centro_atom_cu-ni deposit custom 200 cu-ni_28A.csp id type x y z c_1
+ 
+run	           7000 
+
+
+# unloading 
+
+
+
+variable           y equal "220-7000*dt*2+(step-7000)*dt*0.4"
+fix	           5 deposit indent 100 sphere 100 v_y 100 15.0 units box
+
+run                10000    
+
+
